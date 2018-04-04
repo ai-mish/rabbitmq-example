@@ -10,13 +10,14 @@ parameters = pika.ConnectionParameters('192.168.56.111',
 connection = pika.BlockingConnection(parameters)
 channel = connection.channel()
 
-channel.queue_declare(queue='hello')
+channel.queue_declare(queue='sas.audit.queue',durable=True)
+
 
 def callback(ch, method, properties, body):
     print(" [x] Received %r" % body)
 
 channel.basic_consume(callback,
-                      queue='hello',
+                      queue='sas.audit.queue',
                       no_ack=True)
 
 print(' [*] Waiting for messages. To exit press CTRL+C')

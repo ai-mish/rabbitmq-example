@@ -14,7 +14,6 @@ ConnectionFactory/RefAddr/2/Content=com.rabbitmq.jms.admin.RMQObjectFactory
 ConnectionFactory/RefAddr/2/Type=factory
 ConnectionFactory/RefAddr/2/Encoding=String
 
-
 # Change this line accordingly if the broker is not at localhost
 ConnectionFactory/RefAddr/3/Content=192.168.56.111
 ConnectionFactory/RefAddr/3/Type=host
@@ -32,23 +31,26 @@ ConnectionFactory/RefAddr/7/Content=/
 ConnectionFactory/RefAddr/7/Type=VirtualHost
 ConnectionFactory/RefAddr/7/Encoding=String
 
+ConnectionFactory/RefAddr/8/Content=true
+ConnectionFactory/RefAddr/8/Type=requeueOnMessageListenerException
+ConnectionFactory/RefAddr/8/Encoding=Boolean
+
 
 sas.audit.queue/ClassName=javax.jms.Queue
 sas.audit.queue/FactoryName=com.rabbitmq.jms.admin.RMQObjectFactory
-sas.audit.queue/RefAddr/0/Content=jms/Queue
 
+sas.audit.queue/RefAddr/0/Content=jms/Queue
 sas.audit.queue/RefAddr/0/Type=name
 sas.audit.queue/RefAddr/0/Encoding=String
-sas.audit.queue/RefAddr/1/Content=jms/ConnectionFactory
 
+sas.audit.queue/RefAddr/1/Content=javax.jms.ConnectionFactory
 sas.audit.queue/RefAddr/1/Type=type
 sas.audit.queue/RefAddr/1/Encoding=String
-sas.audit.queue/RefAddr/2/Content=javax.jms.ConnectionFactory
 
+sas.audit.queue/RefAddr/2/Content=com.rabbitmq.jms.admin.RMQObjectFactory
 sas.audit.queue/RefAddr/2/Type=factory
 sas.audit.queue/RefAddr/2/Encoding=String
-sas.audit.queue/RefAddr/3/Content=com.rabbitmq.jms.admin.RMQObjectFactory
 
+sas.audit.queue/RefAddr/3/Content=sas.audit.queue
 sas.audit.queue/RefAddr/3/Type=destinationName
 sas.audit.queue/RefAddr/3/Encoding=String
-sas.audit.queue/RefAddr/3/Content=sas.audit.queue
