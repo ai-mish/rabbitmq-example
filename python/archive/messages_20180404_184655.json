@@ -1,0 +1,37 @@
+[
+    {
+        "version": 2,
+        "id": "40898ce2-9005-4c2c-ade0-f1b4eb1577d3",
+        "type": "security",
+        "payloadType": "application/vnd.sas.event.security",
+        "user": "videmo",
+        "timeStamp": "2018-03-24T10:30:42.620Z",
+        "headers": {
+            "sas-event-source": "SASLogon",
+            "sas-deployment-id": "viya",
+            "__tenant": "provider"
+        },
+        "payload": {
+            "action": "login",
+            "actionState": "SUCCESS"
+        }
+    },
+    {
+        "version": 2,
+        "id": "de12a40d-6629-48df-9a28-72b8ad1a6c54",
+        "type": "security",
+        "payloadType": "application/vnd.sas.event.security",
+        "user": "UNKNOWN",
+        "timeStamp": "2018-03-24T10:30:42.628Z",
+        "headers": {
+            "session_sig": "ec88623d",
+            "sas-event-source": "SASLogon",
+            "sas-deployment-id": "viya",
+            "__tenant": "provider"
+        },
+        "payload": {
+            "action": "SessionDestroyed",
+            "actionState": "SUCCESS"
+        }
+    }
+]

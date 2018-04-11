@@ -1,0 +1,49 @@
+[
+    {
+        "version": 2,
+        "id": "666d7399-c78b-4622-9e51-73276832dfdb",
+        "type": "security",
+        "payloadType": "application/vnd.sas.event.security",
+        "user": "sas.logon",
+        "timeStamp": "2018-03-24T10:30:42.589Z",
+        "headers": {
+            "sas-event-source": "authorization",
+            "sas-deployment-id": "viya",
+            "__tenant": "provider"
+        },
+        "payload": {
+            "action": "read",
+            "message": "Authorization decision request",
+            "actionState": "SUCCESS",
+            "properties": {
+                "decision": "true",
+                "permission": null,
+                "uri": "/identities/users/videmo/memberships"
+            }
+        }
+    },
+    {
+        "version": 2,
+        "id": "1c5dbd4e-6934-4738-9e09-fdc8b0f8a035",
+        "type": "resource",
+        "payloadType": "application/vnd.sas.event.resource",
+        "user": "sas.logon",
+        "timeStamp": "2018-03-24T10:30:42.615Z",
+        "headers": {
+            "sas-remote-address": "172.17.0.12",
+            "sas-event-source": "identities",
+            "sas-deployment-id": "viya",
+            "__tenant": "provider"
+        },
+        "payload": {
+            "action": "read",
+            "actionState": "SUCCESS",
+            "uri": "/identities/users/videmo/memberships",
+            "httpContext": {
+                "statusCode": 200,
+                "method": "GET",
+                "queryString": "depth=-1&limit=2147483647"
+            }
+        }
+    }
+]
