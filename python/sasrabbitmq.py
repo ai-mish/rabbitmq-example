@@ -4,31 +4,24 @@ __author__ = "mudit.mishra@sas.com"
 __copyright__ = "Copyright (C) 2018 mudit.mishra@sas.com"
 __license__ = "Public Domain"
 __version__ = "1.0"
-
-#Standar libraries
+#Standard libraries
 import logging
 import sys
 import time
 import json
 import io
 import argparse
-
-#Pika module to consume messages from AMQP or RabbitMQ
 import pika
-
-
-# Make it work for Python 2+3 and with Unicode
-
-try:
-    to_unicode = unicode
-except NameError:
-    to_unicode = str
-
+#CONSTANTS
 MESSAGE_FILE_PREFIX = "message"
 LOG_FORMAT = ('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 LOGGER = logging.getLogger(__name__)
 
-
+# Make it work for Python 2+3 and with Unicode
+try:
+    to_unicode = unicode
+except NameError:
+    to_unicode = str
 
 class RMQConsumer(object):
 
@@ -211,7 +204,6 @@ def getArguments():
         requiredNamed.add_argument('-q', '--queue',dest='queue',help='Name of RabbitMQ queue',type=str,required=True)
         requiredNamed.add_argument('-o', '--output','-i', '--input',dest='file',help='Output or Input file where messages are stored',required=True,type=str)
         args_dict = vars(parser.parse_args())
-
         if args_dict['receive']:
             args_dict['action'] = 'receive'
         elif args_dict['delete']:
@@ -224,14 +216,12 @@ def main(argv):
     #initialize logging
     logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
     LOGGER = logging.getLogger('sasrabbitmq')
-
     #Read input options
     args_dict = getArguments()
     action = args_dict['action']
     amqp_uri = args_dict['uri']
     filename = args_dict['file']
     queue = args_dict['queue']
-
     if 'amqp://' in amqp_uri:
         try:
             LOGGER.info("Action: %s" % action)
@@ -248,11 +238,10 @@ def main(argv):
 
     return 0
 
-
 if __name__ == '__main__':
     try:
         sys.exit(main(sys.argv[0:]))
-    except:
+    except Exception as exception:
         # Try our best to log the error.
         try:
             log.exception("Uncaught error running Python code to process RabbitMQ messages")
