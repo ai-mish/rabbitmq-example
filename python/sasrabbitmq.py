@@ -241,7 +241,7 @@ def main(argv):
 if __name__ == '__main__':
     try:
         sys.exit(main(sys.argv[0:]))
-    except Exception as exception:
+    except:
         # Try our best to log the error.
         try:
             log.exception("Uncaught error running Python code to process RabbitMQ messages")
