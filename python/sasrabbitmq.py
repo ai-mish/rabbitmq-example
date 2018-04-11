@@ -155,18 +155,19 @@ class RMQConsumer(object):
         self.save_messages()
 
 
-def main():
-    logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
-    consumer = RMQConsumer('amqp://guest:guest@pdcesx16063.exnet.sas.com:5672/%2F')
+def run(action, amqp_uri, queue, filename):
+    LOGGER = logging.getLogger('run')
+    #consumer = RMQConsumer('amqp://guest:guest@pdcesx16063.exnet.sas.com:5672/%2F')
     try:
-        consumer.run()
+        consumer.run(action, amqp_uri, queue, filename)
     except KeyboardInterrupt:
         #consumer.stop()
         LOGGER.info('Stop')
 
 
 def main(argv):
-    log = logging.getLogger('sasrabbitmq')
+    logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
+    LOGGER = logging.getLogger('sasrabbitmq')
 
     #Command line options parser and validation
     parser = argparse.ArgumentParser(prog='sasrabbitmq.py', usage='%(prog)s [options]')
@@ -179,7 +180,12 @@ def main(argv):
                                help='Acknowledge message from RMQ without acknowledgement')
     requiredNamed.add_argument('-u', '--uri',
                                dest='uri',
-                               help='URI needed by pikka module to connect to RabbitMQ server',
+                               help="URI needed by pikka module to connect to RabbitMQ server e.g. amqp://username:password@rabbitmq.mydomain.com:5672/%%2F",
+                               type=str,
+                               required=True)
+    requiredNamed.add_argument('-q', '--queue',
+                               dest='queue',
+                               help='Name of RabbitMQ queue',
                                type=str,
                                required=True)
     requiredNamed.add_argument('-o', '--output','-i', '--input',
@@ -194,6 +200,28 @@ def main(argv):
 
     #results = parser.parse_args(['receive', '-u', 'amqp://' '-o', '/tmp/temp.txt'])
     results = parser.parse_args()
+
+    if results.receive:
+        action='receive'
+    elif results.ack:
+        action='ack'
+    else:
+        action='NA'
+
+    amqp_uri = results.uri
+    filename = results.file
+    queue = results.queue
+
+    try:
+        #consumer.run(action, amqp_uri, queue, filename)
+        LOGGER.info("Action: %s" % action)
+        LOGGER.info("URI: %s" % amqp_uri)
+        LOGGER.info("Queue: %s" % queue)
+        LOGGER.info("Filename: %s" % filename)
+    except KeyboardInterrupt:
+        #consumer.stop()
+        LOGGER.info('Stop')
+
     print(results)
 
     return 0
