@@ -27,6 +27,36 @@ except NameError:
 LOG_FORMAT = ('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 LOGGER = logging.getLogger(__name__)
 
+def getInputParameters():
+
+        LOGGER = logging.getLogger('getInputParameters')
+        parser = argparse.ArgumentParser(prog='sasrabbitmq.py', usage='%(prog)s [options]')
+
+        requiredNamed = parser.add_argument_group('Required arguments')
+        requiredNamed.add_argument('-receive',
+                                   action="store_true",
+                                   help='Receive message from RMQ without acknowledgement')
+        requiredNamed.add_argument('-ack',
+                                   action="store_true",
+                                   help='Acknowledge message from RMQ without acknowledgement')
+        requiredNamed.add_argument('-u', '--uri',
+                                   dest='uri',
+                                   help="URI needed by pikka module to connect to RabbitMQ server e.g. amqp://username:password@rabbitmq.mydomain.com:5672/%%2F",
+                                   type=str,
+                                   required=True)
+        requiredNamed.add_argument('-q', '--queue',
+                                   dest='queue',
+                                   help='Name of RabbitMQ queue',
+                                   type=str,
+                                   required=True)
+        requiredNamed.add_argument('-o', '--output','-i', '--input',
+                                    dest='file',
+                                    help='Output or Input file where messages are stored',
+                                    required=True,
+                                    type=str
+                                    )
+
+        return parser.parse_args()
 
 class RMQConsumer(object):
 
@@ -155,52 +185,13 @@ class RMQConsumer(object):
         self.save_messages()
 
 
-def run(action, amqp_uri, queue, filename):
-    LOGGER = logging.getLogger('run')
-    #consumer = RMQConsumer('amqp://guest:guest@pdcesx16063.exnet.sas.com:5672/%2F')
-    try:
-        consumer.run(action, amqp_uri, queue, filename)
-    except KeyboardInterrupt:
-        #consumer.stop()
-        LOGGER.info('Stop')
-
 
 def main(argv):
+
     logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
     LOGGER = logging.getLogger('sasrabbitmq')
 
-    #Command line options parser and validation
-    parser = argparse.ArgumentParser(prog='sasrabbitmq.py', usage='%(prog)s [options]')
-    requiredNamed = parser.add_argument_group('Required arguments')
-    requiredNamed.add_argument('-receive',
-                               action="store_true",
-                               help='Receive message from RMQ without acknowledgement')
-    requiredNamed.add_argument('-ack',
-                               action="store_true",
-                               help='Acknowledge message from RMQ without acknowledgement')
-    requiredNamed.add_argument('-u', '--uri',
-                               dest='uri',
-                               help="URI needed by pikka module to connect to RabbitMQ server e.g. amqp://username:password@rabbitmq.mydomain.com:5672/%%2F",
-                               type=str,
-                               required=True)
-    requiredNamed.add_argument('-q', '--queue',
-                               dest='queue',
-                               help='Name of RabbitMQ queue',
-                               type=str,
-                               required=True)
-    requiredNamed.add_argument('-o', '--output','-i', '--input',
-                                dest='file',
-                                help='Output or Input file where messages are stored',
-                                required=True,
-                                type=str
-                                )
-    #parser.add_argument('--amqp_uri', dest='accumulate', action='store_const',
-    #               const=amqp_uri, default="amqp://guest:guest@plocalhost:5672/%2F",
-    #               help='URI needed by pikka module to connect to RabbitMQ server.')
-
-    #results = parser.parse_args(['receive', '-u', 'amqp://' '-o', '/tmp/temp.txt'])
-    results = parser.parse_args()
-
+    results = getInputParameters()
     if results.receive:
         action='receive'
     elif results.ack:
@@ -212,17 +203,18 @@ def main(argv):
     filename = results.file
     queue = results.queue
 
-    try:
-        #consumer.run(action, amqp_uri, queue, filename)
-        LOGGER.info("Action: %s" % action)
-        LOGGER.info("URI: %s" % amqp_uri)
-        LOGGER.info("Queue: %s" % queue)
-        LOGGER.info("Filename: %s" % filename)
-    except KeyboardInterrupt:
-        #consumer.stop()
-        LOGGER.info('Stop')
-
-    print(results)
+    if 'amqp://' in amqp_uri:
+        try:
+            #consumer.run(action, amqp_uri, queue, filename)
+            LOGGER.info("Action: %s" % action)
+            LOGGER.info("URI: %s" % amqp_uri)
+            LOGGER.info("Queue: %s" % queue)
+            LOGGER.info("Filename: %s" % filename)
+        except KeyboardInterrupt:
+            #consumer.stop()
+            LOGGER.info('Stop')
+    else:
+        LOGGER.info("Invalid AMQP URI: %s" % amqp_uri)
 
     return 0
 
